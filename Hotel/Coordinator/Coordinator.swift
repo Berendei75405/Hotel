@@ -16,6 +16,8 @@ protocol MainCoordinatorProtocol: AnyObject {
     func createBookingModule() -> UIViewController
     func showBookingModule()
     func goBack()
+    func createOrderModule() -> UIViewController
+    func showOrderModule() 
 }
 
 final class Coordinator: MainCoordinatorProtocol {
@@ -80,10 +82,11 @@ final class Coordinator: MainCoordinatorProtocol {
     func popToRoot() {
         if let tabBarCon = tabBarCon {
             tabBarCon.tabBar.isHidden = false
-            
             guard let nvc = tabBarCon.viewControllers?.first as? UINavigationController else {return}
             
-            nvc.popToRootViewController(animated: true)
+            let first = nvc.viewControllers.first
+            nvc.viewControllers.removeAll()
+            nvc.viewControllers = [first!]
         }
     }
     
@@ -92,6 +95,9 @@ final class Coordinator: MainCoordinatorProtocol {
         let view = BookingViewController()
         let viewModel = BookingViewModel()
         let coordinator = self
+        if let tabBar = tabBarCon {
+            view.tabBar = tabBar 
+        }
 
         view.viewModel = viewModel
         viewModel.coordinator = coordinator
@@ -118,6 +124,30 @@ final class Coordinator: MainCoordinatorProtocol {
             guard let nvc = tabBarCon.viewControllers?.first as? UINavigationController else {return}
             
             nvc.popViewController(animated: true)
+        }
+    }
+    
+    //MARK: - createOrderModule
+    func createOrderModule() -> UIViewController {
+        let view = OrderViewController()
+        let viewModel = OrderViewModel()
+        let coordinator = self
+
+        view.viewModel = viewModel
+        viewModel.coordinator = coordinator
+        
+        return view
+    }
+    
+    //MARK: - showOrderModule
+    func showOrderModule() {
+        if let tabBarCon = tabBarCon {
+            let view = createOrderModule()
+            guard let nvc = tabBarCon.viewControllers?.first as? UINavigationController else {return}
+            view.navigationItem.hidesBackButton = true
+            tabBarCon.tabBar.isHidden = false
+            
+            nvc.pushViewController(view, animated: true)
         }
     }
 }
