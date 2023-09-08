@@ -152,6 +152,8 @@ final class RoomTableCell: UITableViewCell {
         return but
     }()
     
+    private var countImage = 0
+    
     //MARK: - init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super .init(style: style, reuseIdentifier: reuseIdentifier)
@@ -314,7 +316,7 @@ final class RoomTableCell: UITableViewCell {
     
     //MARK: - configurate
     func configurate(title: String, price: Int,
-                     pricePer: String) {
+                     pricePer: String, countImage: Int) {
         titleLabel.text = title
         let numberFormatter = NumberFormatter()
         numberFormatter.numberStyle = .decimal
@@ -322,6 +324,7 @@ final class RoomTableCell: UITableViewCell {
 
         self.priceLabel.text = "От \(newPrice.replacingOccurrences(of: ",", with: " "))₽"
         self.priceForItLabel.text = pricePer
+        self.countImage = countImage
     }
     
     //MARK: - selectRoomAction
@@ -346,7 +349,8 @@ extension RoomTableCell: UICollectionViewDelegate,
         if collectionView.accessibilityIdentifier == "collectionView" {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotoCell.identifier, for: indexPath) as? PhotoCell else { return UICollectionViewCell() }
             
-            cell.configurate(image: dataSource?.fetchPhoto(index: indexPath.row, indexTableRows: self.indexPath.row) ?? UIImage())
+            cell.contentView.accessibilityIdentifier = String(indexPath.row)
+            cell.configurate(image: dataSource?.fetchPhoto(index: indexPath.row, indexTableRows: self.indexPath.row) ?? UIImage(), countPhoto: countImage)
             
             return cell
         } else {
@@ -358,4 +362,3 @@ extension RoomTableCell: UICollectionViewDelegate,
         }
     }
 }
-
