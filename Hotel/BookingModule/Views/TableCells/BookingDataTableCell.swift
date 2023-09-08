@@ -9,7 +9,6 @@ import UIKit
 
 final class BookingDataTableCell: UITableViewCell {
     static let identifier = "BookingDataTableCell"
-    private var rightItemArray = [String]()
     
     //MARK: - mainView
     private let mainView: UIView = {
@@ -36,6 +35,7 @@ final class BookingDataTableCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super .init(style: style, reuseIdentifier: reuseIdentifier)
         setupConstraints()
+        createDataStackView()
     }
     
     required init?(coder: NSCoder) {
@@ -44,18 +44,33 @@ final class BookingDataTableCell: UITableViewCell {
     
     //MARK: - configurate
     func configurate(hotelName: String, departure: String, arrivalCountry: String, tourDateStart: String, tourDateStop: String, numberOfNights: Int, room: String, nutrition: String) {
-        self.rightItemArray.append(departure)
-        self.rightItemArray.append(arrivalCountry)
-        self.rightItemArray.append(tourDateStart + "-" + tourDateStop)
-        self.rightItemArray.append(String(numberOfNights))
-        self.rightItemArray.append(hotelName)
-        self.rightItemArray.append(room)
-        self.rightItemArray.append(nutrition)
-        createDataStackView()
+        
+        for index in 0..<dataStackView.arrangedSubviews.count {
+            guard let stackView = dataStackView.arrangedSubviews[index] as? UIStackView else { return }
+            guard let label = stackView.arrangedSubviews[1] as? UILabel else { return }
+            switch index {
+            case .zero:
+                label.text = departure
+            case 1:
+                label.text = arrivalCountry
+            case 2:
+                label.text = tourDateStart + "-" + tourDateStop
+            case 3:
+                label.text = String(numberOfNights)
+            case 4:
+                label.text = hotelName
+            case 5:
+                label.text = room
+            case 6:
+                label.text = nutrition
+            default:
+                return
+            }
+        }
     }
     
     //MARK: - createHorizontalStack
-    private func createHorizontalStack(leftInfo: String, rightInfo: String) -> UIStackView {
+    private func createHorizontalStack(leftInfo: String) -> UIStackView {
         let horizontalStackView: UIStackView = {
             let leftLabel: UILabel = {
                 let lab = UILabel()
@@ -72,7 +87,6 @@ final class BookingDataTableCell: UITableViewCell {
                 lab.translatesAutoresizingMaskIntoConstraints = false
                 lab.font = .init(name: "SFProDisplay-Regular", size: 16)
                 lab.textColor = .black
-                lab.text = rightInfo
                 lab.numberOfLines = 3
                 lab.lineBreakMode = .byWordWrapping
                 
@@ -94,11 +108,9 @@ final class BookingDataTableCell: UITableViewCell {
     //MARK: - createDataStackView
     private func createDataStackView() {
         let leftArray = ["Вылет из", "Страна, город", "Даты", "Кол-во ночей", "Отель", "Номер", "Питание"]
-        if !self.rightItemArray.isEmpty {
-            for i in 0..<7 {
-                let stack = createHorizontalStack(leftInfo: leftArray[i], rightInfo: self.rightItemArray[i])
-                dataStackView.addArrangedSubview(stack)
-            }
+        for i in 0..<7 {
+            let stack = createHorizontalStack(leftInfo: leftArray[i])
+            dataStackView.addArrangedSubview(stack)
         }
     }
     

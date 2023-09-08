@@ -41,6 +41,8 @@ extension BookingViewController {
     }
     
     @objc func backButtonTap() {
+        tabBar?.tabBar.isHidden = true
+        tabBar?.button.setTitle("К выбору номера", for: .normal)
         viewModel.popToRoot()
     }
 }
