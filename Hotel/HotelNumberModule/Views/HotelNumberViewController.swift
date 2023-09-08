@@ -104,7 +104,7 @@ extension HotelNumberViewController: UITableViewDelegate,
         
         //конфигурируем яйчейку
         cell.configurate(title: viewModel.roomArray?.rooms[indexPath.row].name ?? "",
-                         price: viewModel.roomArray?.rooms[indexPath.row].price ?? 0, pricePer: viewModel.roomArray?.rooms[indexPath.row].pricePer ?? "")
+                         price: viewModel.roomArray?.rooms[indexPath.row].price ?? 0, pricePer: viewModel.roomArray?.rooms[indexPath.row].pricePer ?? "", countImage: viewModel.imagesArray[indexPath.row].count)
         
         //подписываемся на протоколы
         cell.dataSource = self
