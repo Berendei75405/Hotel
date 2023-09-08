@@ -117,7 +117,7 @@ extension HotelViewController: UITableViewDelegate,
             guard let cell = tableView.dequeueReusableCell(withIdentifier: HotelPhotoAndPriceCell.identifier, for: indexPath) as? HotelPhotoAndPriceCell else { return UITableViewCell() }
             
             cell.dataSource = self
-            cell.confugurate(rating: viewModel.hotel?.rating ?? 0, ratingName: viewModel.hotel?.ratingName ?? "", title: viewModel.hotel?.name ?? "", address: viewModel.hotel?.adress ?? "", price: viewModel.hotel?.minimalPrice ?? 0, priceForIt: viewModel.hotel?.priceForIt ?? "")
+            cell.confugurate(rating: viewModel.hotel?.rating ?? 0, ratingName: viewModel.hotel?.ratingName ?? "", title: viewModel.hotel?.name ?? "", address: viewModel.hotel?.adress ?? "", price: viewModel.hotel?.minimalPrice ?? 0, priceForIt: viewModel.hotel?.priceForIt ?? "", countPhoto: viewModel.imagesData.count)
             cell.selectionStyle = .none
             
             return cell
@@ -164,4 +164,3 @@ extension HotelViewController: UITableViewDelegate,
     }
     
 }
-
