@@ -125,6 +125,8 @@ final class HotelPhotoAndPriceCell: UITableViewCell {
         return lab
     }()
     
+    private var photoCount = 0
+    
     weak var dataSource: HotelPhotoAndPriceCellDataSource?
     
     //MARK: - init
@@ -221,7 +223,7 @@ final class HotelPhotoAndPriceCell: UITableViewCell {
     //MARK: - configurate
     func confugurate(rating: Int, ratingName: String,
                      title: String, address: String,
-                     price: Int, priceForIt: String) {
+                     price: Int, priceForIt: String, countPhoto: Int) {
         self.markLabel.text = "\(rating) \(ratingName)"
         self.titleLabel.text = title
         self.addressButton.setTitle(address, for: .normal)
@@ -231,6 +233,7 @@ final class HotelPhotoAndPriceCell: UITableViewCell {
 
         self.priceLabel.text = "От \(newPrice.replacingOccurrences(of: ",", with: " "))₽"
         self.priceForItLabel.text = priceForIt
+        self.photoCount = countPhoto
     }
 }
 
@@ -244,7 +247,8 @@ extension HotelPhotoAndPriceCell: UICollectionViewDelegate,
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotoCell.identifier, for: indexPath) as? PhotoCell else { return UICollectionViewCell() }
         
-        cell.configurate(image: dataSource?.fetchPhoto(index: indexPath.row) ?? UIImage())
+        cell.contentView.accessibilityIdentifier = String(indexPath.row)
+        cell.configurate(image: dataSource?.fetchPhoto(index: indexPath.row) ?? UIImage(), countPhoto: photoCount)
         
         return cell
     }
